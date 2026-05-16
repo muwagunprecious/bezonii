@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IIN Secure Chat Demo</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    .chat-box { background: #fff; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .messages { height: 200px; overflow-y: auto; border: 1px solid #ccc; margin-bottom: 10px; padding: 10px; background: #fafafa; }
+    .input-group { display: flex; gap: 10px; }
+    input, button { padding: 10px; font-size: 1em; }
+    .message { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="chat-box">
+    <h2>🔒 IIN Chat</h2>
+    <div>
+      <input type="text" id="iin" placeholder="Enter your IIN" />
+      <button onclick="login()">Login</button>
+    </div>
+    <div id="chat" style="display:none;">
+      <p>Logged in as: <strong id="currentUser"></strong></p>
+      <input type="text" id="recipient" placeholder="Recipient IIN" /><br/><br/>
+      <div class="messages" id="messages"></div>
+      <div class="input-group">
+        <input type="text" id="msg" placeholder="Enter message" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let users = {}; // Simulates a user directory
+    let currentUser = null;
+
+    // Simulate key generation (NOT real secure keys!)
+    function generateKeyPair(iin) {
+      return {
+        publicKey: btoa(iin + "-pub"),
+        privateKey: btoa(iin + "-priv"),
+      };
+    }
+
+    function login() {
+      const iin = document.getElementById("iin").value.trim();
+      if (!iin) return alert("Enter a valid IIN");
+      if (!users[iin]) {
+        users[iin] = generateKeyPair(iin);
+      }
+      currentUser = iin;
+      document.getElementById("currentUser").textContent = iin;
+      document.getElementById("chat").style.display = "block";
+    }
+
+    function encrypt(message, recipientIIN) {
+      const pubKey = users[recipientIIN]?.publicKey;
+      if (!pubKey) return null;
+      return btoa(`${message}|${pubKey}`);
+    }
+
+    function decrypt(encMessage, userIIN) {
+      const privKey = users[userIIN]?.privateKey;
+      if (!privKey) return null;
+      const raw = atob(encMessage);
+      return raw.split("|")[0];
+    }
+
+    function sendMessage() {
+      const recipient = document.getElementById("recipient").value.trim();
+      const msg = document.getElementById("msg").value;
+
+      if (!recipient || !msg) {
+        alert("Recipient and message are required.");
+        return;
+      }
+
+      if (!users[recipient]) {
+        users[recipient] = generateKeyPair(recipient); // Auto-create recipient
+      }
+
+      const encrypted = encrypt(msg, recipient);
+      const decrypted = decrypt(encrypted, recipient); // Simulate recipient
+
+      const messagesDiv = document.getElementById("messages");
+      messagesDiv.innerHTML += `<div class='message'><b>You:</b> ${msg}<br/><b>Encrypted:</b> ${encrypted}<br/><b>Recipient sees:</b> ${decrypted}</div>`;
+      document.getElementById("msg").value = "";
+    }
+  </script>
+</body>
+</html>
