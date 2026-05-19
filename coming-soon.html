@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon — Bezoni App</title>
+    <meta name="description" content="The Bezoni app is coming soon. Join the waitlist for early access.">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="satoshi.css">
+    <style>
+        :root {
+            --primary: #064e3b;
+            --accent: #86efac;
+            --accent-gradient: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+            --bg-wheat: #f5deb3;
+            --text-muted: #6b7280;
+            --radius-lg: 1.5rem;
+            --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.18);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background: linear-gradient(160deg, #f0fdf4 0%, var(--bg-wheat) 50%, #d1fae5 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--primary);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Decorative blobs */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::before {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(134,239,172,0.25) 0%, transparent 70%);
+            top: -200px; right: -200px;
+        }
+        body::after {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(6,78,59,0.08) 0%, transparent 70%);
+            bottom: -150px; left: -150px;
+        }
+
+        /* === TOP BAR === */
+        .top-bar {
+            width: 100%;
+            position: fixed;
+            top: 0; left: 0;
+            padding: 1.25rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(134,239,172,0.25);
+            z-index: 100;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6rem;
+            border: 1.5px solid rgba(6,78,59,0.2);
+            background: rgba(255,255,255,0.8);
+            transition: var(--transition);
+        }
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateX(-3px);
+        }
+        .back-btn i { font-size: 1rem; }
+
+        .top-logo img {
+            height: 2.2rem;
+        }
+
+        /* === PAGE WRAPPER === */
+        .page {
+            width: 100%;
+            max-width: 560px;
+            padding: 7rem 1.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === HERO TEXT === */
+        .page-hero { text-align: center; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-gradient);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            border-radius: 6rem;
+            margin-bottom: 1.5rem;
+        }
+        .badge i { font-size: 0.9rem; }
+
+        .page-hero h1 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .page-hero p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        /* Platform display badges */
+        .platform-badges {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+        }
+
+        .p-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border-radius: 6rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 2px solid transparent;
+            background: white;
+            color: var(--text-muted);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: var(--transition);
+        }
+
+        .p-badge.active-ios {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(6,78,59,0.05);
+        }
+        .p-badge.active-android {
+            border-color: #22c55e;
+            color: #166534;
+            background: rgba(34,197,94,0.07);
+        }
+
+        /* === CARD === */
+        .card {
+            width: 100%;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(134,239,172,0.3);
+        }
+
+        /* === FORM === */
+        .form-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+        }
+        .form-sub {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.02em;
+        }
+
+        .form-group input {
+            padding: 0.85rem 1.1rem;
+            border: 2px solid rgba(6,78,59,0.15);
+            border-radius: 0.875rem;
+            font-size: 1rem;
+            font-family: inherit;
+            color: var(--primary);
+            background: white;
+            transition: var(--transition);
+            outline: none;
+        }
+        .form-group input::placeholder { color: #9ca3af; }
+        .form-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(134,239,172,0.2);
+        }
+
+        /* Platform selector */
+        .platform-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .platform-tiles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-tile input[type="radio"] { display: none; }
+
+        .platform-tile label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 1rem 0.5rem;
+            border-radius: 1rem;
+            border: 2px solid rgba(6,78,59,0.12);
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            user-select: none;
+        }
+        .platform-tile label i { font-size: 1.6rem; }
+        .platform-tile label:hover {
+            border-color: var(--accent);
+            background: rgba(134,239,172,0.08);
+            color: var(--primary);
+        }
+        .platform-tile input[type="radio"]:checked + label {
+            border-color: var(--primary);
+            background: rgba(6,78,59,0.06);
+            color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(134,239,172,0.35);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 6rem;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            color: var(--primary);
+            box-shadow: 0 8px 20px rgba(134,239,172,0.4);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            letter-spacing: 0.01em;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(134,239,172,0.5);
+        }
+        .btn-submit:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(6,78,59,0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+        .btn-submit.loading .spinner { display: block; }
+        .btn-submit.loading .btn-label { display: none; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* === SUCCESS STATE === */
+        .success-state {
+            display: none;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        .success-state.show { display: block; }
+
+        .check-circle {
+            width: 80px; height: 80px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+        }
+        .check-circle i { font-size: 2.5rem; color: var(--primary); }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        .success-state h2 {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+        .success-state p {
+            font-size: 0.98rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+        .success-email {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .success-tags {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        .success-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border-radius: 6rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: rgba(6,78,59,0.07);
+            color: var(--primary);
+        }
+        .success-tag i { font-size: 0.85rem; color: #22c55e; }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            padding: 0.8rem 2rem;
+            border-radius: 6rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary);
+            border: 2px solid rgba(6,78,59,0.2);
+            background: white;
+            transition: var(--transition);
+            margin-top: 0.5rem;
+        }
+        .btn-home:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Counter */
+        .counter-bar {
+            width: 100%;
+            text-align: center;
+        }
+        .counter-bar p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+        .counter-bar span {
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(0,0,0,0.08);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 480px) {
+            .top-bar { padding: 1rem 1.25rem; }
+            .page { padding: 6.5rem 1rem 3rem; }
+            .card { padding: 2rem 1.25rem; }
+            .platform-tiles { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+            .platform-tile label { padding: 0.75rem 0.25rem; font-size: 0.75rem; }
+            .platform-tile label i { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top bar -->
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">
+            <i class="ri-arrow-left-s-line"></i>
+            <span>Back</span>
+        </a>
+        <div class="top-logo">
+            <img src="Digital Format/PNGs/300 Dpi/Monochromatic Version.png" alt="Bezoni">
+        </div>
+        <div style="width:80px;"></div><!-- spacer -->
+    </div>
+
+    <div class="page">
+
+        <!-- Hero -->
+        <div class="page-hero" data-platform-hero>
+            <div class="badge" id="platformBadge">
+                <i class="ri-smartphone-line"></i>
+                <span>Mobile App</span>
+            </div>
+            <h1>We're Building<br>Something Great</h1>
+            <p id="heroSubtext">Our team is crafting the ultimate delivery experience. Be first in line when we launch.</p>
+            <div class="platform-badges">
+                <span class="p-badge" id="badge-ios"><i class="ri-apple-fill"></i> iOS</span>
+                <span class="p-badge" id="badge-android"><i class="ri-google-play-fill"></i> Android</span>
+            </div>
+        </div>
+
+        <!-- Card: Form + Success -->
+        <div class="card">
+
+            <!-- Form -->
+            <div id="formState">
+                <p class="form-title">Join the Waitlist</p>
+                <p class="form-sub">Get notified the moment we launch — plus exclusive early perks.</p>
+
+                <form id="waitlistForm" novalidate>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="e.g. Amara Johnson" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+
+                    <span class="platform-label">Your Preferred Platform</span>
+                    <div class="platform-tiles">
+                        <div class="platform-tile">
+                            <input type="radio" name="platform" id="p-ios" value="ios">
+                            <label for="p-ios">
+                                <i class="ri-apple-fill"></i>
+                                iPhone
+                            </label>
+                        </div>
+                        <div class="platform-tile">
+                            <input type="radio" name="platform" id="p-android" value="android">
+                            <label for="p-android">
+                                <i class="ri-google-play-fill" style="color:#34A853;"></i>
+                                Android
+                            </label>
+                        </div>
+                        <div class="platform-tile">
+                            <input type="radio" name="platform" id="p-both" value="both">
+                            <label for="p-both">
+                                <i class="ri-device-line"></i>
+                                Both
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn-submit" type="submit" id="submitBtn">
+                        <span class="btn-label"><i class="ri-notification-3-line"></i> Notify Me at Launch</span>
+                        <div class="spinner"></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success -->
+            <div class="success-state" id="successState">
+                <div class="check-circle">
+                    <i class="ri-check-line"></i>
+                </div>
+                <h2>You're on the list! 🎉</h2>
+                <p>We'll notify <span class="success-email" id="successEmail"></span> the moment Bezoni launches.</p>
+                <div class="success-tags">
+                    <span class="success-tag"><i class="ri-check-line"></i> Early Access</span>
+                    <span class="success-tag"><i class="ri-check-line"></i> Launch Perks</span>
+                    <span class="success-tag" id="successPlatformTag"><i class="ri-check-line"></i> iOS & Android</span>
+                </div>
+                <a href="index.html" class="btn-home">
+                    <i class="ri-home-line"></i> Back to Home
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Waitlist counter -->
+        <div class="counter-bar" id="counterBar">
+            <p><span id="waitlistCount">0</span> people have already joined the waitlist.</p>
+        </div>
+
+    </div>
+
+    <script>
+    (function() {
+        const STORAGE_KEY = 'bezoni_waitlist';
+
+        // --- Read platform from URL ---
+        const params   = new URLSearchParams(window.location.search);
+        const platform = params.get('platform') || '';
+
+        // Highlight the platform badges at top
+        const badgeIos     = document.getElementById('badge-ios');
+        const badgeAndroid = document.getElementById('badge-android');
+        const platformBadge = document.getElementById('platformBadge');
+        const heroSubtext   = document.getElementById('heroSubtext');
+
+        if (platform === 'ios') {
+            badgeIos.classList.add('active-ios');
+            platformBadge.innerHTML = '<i class="ri-apple-fill"></i> <span>iPhone App</span>';
+            heroSubtext.textContent = 'The Bezoni iPhone app is almost ready. Be the first to get it when it drops on the App Store.';
+        } else if (platform === 'android') {
+            badgeAndroid.classList.add('active-android');
+            platformBadge.innerHTML = '<i class="ri-google-play-fill"></i> <span>Android App</span>';
+            heroSubtext.textContent = 'The Bezoni Android app is almost ready. Be the first to get it when it drops on Google Play.';
+        } else {
+            badgeIos.classList.add('active-ios');
+            badgeAndroid.classList.add('active-android');
+        }
+
+        // Pre-select the matching radio
+        const radioMap = { ios: 'p-ios', android: 'p-android', both: 'p-both' };
+        const radioId  = radioMap[platform] || 'p-both';
+        const radioEl  = document.getElementById(radioId);
+        if (radioEl) radioEl.checked = true;
+
+        // --- Waitlist count ---
+        function getWaitlist() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+            catch(e) { return []; }
+        }
+
+        function saveEntry(entry) {
+            const list = getWaitlist();
+            list.push(entry);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            return list.length;
+        }
+
+        function updateCounter() {
+            const count = getWaitlist().length;
+            const base  = 1247; // seed number to make it feel real
+            document.getElementById('waitlistCount').textContent = (base + count).toLocaleString();
+        }
+
+        updateCounter();
+
+        // --- Form submit ---
+        const form      = document.getElementById('waitlistForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formState = document.getElementById('formState');
+        const successState = document.getElementById('successState');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name  = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const plat  = document.querySelector('input[name="platform"]:checked');
+
+            // Basic validation
+            if (!name) {
+                document.getElementById('fullName').focus();
+                document.getElementById('fullName').style.borderColor = '#f87171';
+                return;
+            }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('email').focus();
+                document.getElementById('email').style.borderColor = '#f87171';
+                return;
+            }
+            if (!plat) {
+                document.getElementById('p-both').checked = true;
+            }
+
+            const selectedPlatform = plat ? plat.value : 'both';
+
+            // Loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                // Save to localStorage
+                const count = saveEntry({
+                    name, email,
+                    platform: selectedPlatform,
+                    joinedAt: new Date().toISOString()
+                });
+
+                // Populate success screen
+                document.getElementById('successEmail').textContent = email;
+                const platformLabel = { ios: 'iPhone', android: 'Android', both: 'iOS & Android' };
+                document.getElementById('successPlatformTag').innerHTML =
+                    '<i class="ri-check-line"></i> ' + (platformLabel[selectedPlatform] || 'All Platforms');
+
+                // Swap states
+                formState.style.display = 'none';
+                successState.classList.add('show');
+
+                // Update counter
+                updateCounter();
+
+            }, 1600);
+        });
+
+        // Reset red border on input
+        ['fullName', 'email'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                this.style.borderColor = '';
+            });
+        });
+
+    })();
+    </script>
+
+</body>
+</html>

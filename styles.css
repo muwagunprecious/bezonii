@@ -10,7 +10,7 @@
   --bg-white: #ffffff;
   --bg-soft: #f0fdf4;
   --bg-wheat: #f5deb3; /* Wheat */
-  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(16, 185, 129, 0.2);
   --radius-sm: 0.5rem;
   --radius-md: 1rem;
@@ -95,6 +95,7 @@ header.navbar {
 header.navbar.scrolled {
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: 1rem 0;
   border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--shadow);
@@ -131,6 +132,30 @@ header.navbar.scrolled {
   border: none;
   cursor: pointer;
   color: var(--text-main);
+  z-index: 1100;
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: var(--transition);
+}
+
+.menu-toggle:hover {
+  background: rgba(6, 78, 59, 0.08);
+}
+
+/* Mobile Menu Overlay */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-overlay.active {
+  opacity: 1;
 }
 
 /* === HERO SECTION === */
@@ -154,7 +179,7 @@ header.navbar.scrolled {
 }
 
 .hero h1 {
-  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: 1.5rem;
@@ -210,20 +235,20 @@ header.navbar.scrolled {
 .steps-section {
   background: var(--primary);
   color: white;
-  padding: 10rem 0;
+  padding: 8rem 0;
 }
 
 .steps-section .section-header h2 {
   color: white;
-  font-size: 3.5rem;
-  margin-bottom: 6rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 5rem;
 }
 
 .step-row {
   display: flex;
   align-items: center;
   gap: 6rem;
-  margin-bottom: 8rem;
+  margin-bottom: 6rem;
 }
 
 .step-row:last-child {
@@ -252,13 +277,13 @@ header.navbar.scrolled {
 }
 
 .step-text h3 {
-  font-size: 2.25rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: 700;
   margin-bottom: 1rem;
 }
 
 .step-text p {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   opacity: 0.8;
 }
 
@@ -266,7 +291,7 @@ header.navbar.scrolled {
   flex: 1;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 3rem;
-  padding: 4rem;
+  padding: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -274,13 +299,17 @@ header.navbar.scrolled {
 
 .step-visual img {
   width: 100%;
-  max-width: 280px;
+  max-width: 220px;
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
 }
 
 /* === DELIVERY CARDS === */
 .delivery-cards {
-  padding: 10rem 0;
+  padding: 8rem 0;
+}
+
+.section-header {
+  margin-bottom: 4rem;
 }
 
 .section-header h4 {
@@ -293,7 +322,7 @@ header.navbar.scrolled {
 }
 
 .section-header h2 {
-  font-size: 3rem;
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
   color: var(--primary);
 }
@@ -335,7 +364,7 @@ header.navbar.scrolled {
 
 /* === PARTNERS SECTION (Refined) === */
 .partners-section {
-  padding: 10rem 0;
+  padding: 8rem 0;
   background: var(--bg-soft);
 }
 
@@ -382,7 +411,7 @@ header.navbar.scrolled {
 
 /* === WAITLIST SECTION (Refined) === */
 .waitlist-section {
-  padding: 5rem 0 10rem;
+  padding: 5rem 0 8rem;
   background: var(--bg-soft);
 }
 
@@ -417,20 +446,20 @@ header.navbar.scrolled {
 }
 
 .waitlist-content h2 {
-  font-size: 4rem;
+  font-size: clamp(2rem, 4vw, 4rem);
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: 2rem;
 }
 
 .waitlist-content p {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   opacity: 0.8;
   margin-bottom: 3rem;
 }
 
 .waitlist-visual {
-  flex: 0 0 350px;
+  flex: 0 0 300px;
   position: relative;
   z-index: 2;
 }
@@ -450,15 +479,15 @@ header.navbar.scrolled {
 footer {
   background: var(--primary);
   color: white;
-  padding: 8rem 0 4rem;
+  padding: 7rem 0 4rem;
   border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 6rem;
-  margin-bottom: 6rem;
+  gap: 5rem;
+  margin-bottom: 5rem;
 }
 
 .footer-brand .logo {
@@ -478,8 +507,8 @@ footer {
 }
 
 .footer-links h4 {
-  font-size: 1.25rem;
-  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
   font-weight: 700;
 }
 
@@ -496,7 +525,7 @@ footer {
   text-decoration: none;
   opacity: 0.6;
   transition: var(--transition);
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 
 .footer-links a:hover {
@@ -511,42 +540,287 @@ footer {
   justify-content: space-between;
   align-items: center;
   opacity: 0.5;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
-/* === MOBILE RESPONSIVENESS === */
+/* ====================================================
+   RESPONSIVE BREAKPOINTS
+   ==================================================== */
+
+/* === TABLET (1024px) === */
 @media (max-width: 1024px) {
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
-  .waitlist-banner { flex-direction: column; text-align: center; padding: 4rem; }
-  .waitlist-visual { flex: 0 0 auto; width: 280px; }
-  .waitlist-content h2 { font-size: 3rem; }
+  .container { padding: 0 1.5rem; }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  /* Waitlist Banner */
+  .waitlist-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 4rem 3rem;
+    border-radius: 3rem;
+  }
+  .waitlist-visual {
+    flex: 0 0 auto;
+    width: 250px;
+    margin: 0 auto;
+  }
+
+  /* Cards / Partner Grid: 2 columns at tablet */
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .partner-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Steps */
+  .step-row {
+    gap: 3rem;
+  }
 }
 
+/* === MOBILE (768px) === */
 @media (max-width: 768px) {
+  .container { padding: 0 1.25rem; }
+
+  /* --- Navbar Mobile --- */
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-overlay {
+    display: block;
+    pointer-events: none;
+  }
+
+  .nav-overlay.active {
+    pointer-events: all;
+  }
+
   .nav-links {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 80%;
+    width: min(80%, 320px);
     height: 100vh;
-    background: var(--bg-white);
+    background: white;
     flex-direction: column;
     justify-content: center;
-    transition: 0.5s ease;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    align-items: flex-start;
+    padding: 6rem 2.5rem 3rem;
+    gap: 0;
+    z-index: 1050;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -4px 0 30px rgba(0,0,0,0.15);
+    overflow-y: auto;
   }
-  
+
   .nav-links.active {
     right: 0;
   }
-  
-  .menu-toggle { display: block; }
 
-  .cards-grid, .partner-grid, .footer-grid { grid-template-columns: 1fr; }
-  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-  
-  .hero h1 { font-size: 2.75rem; }
-  .waitlist-banner { padding: 3rem 2rem; }
+  .nav-links li {
+    width: 100%;
+    border-bottom: 1px solid rgba(6,78,59,0.08);
+  }
+
+  .nav-links li:last-child {
+    border-bottom: none;
+    padding-top: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .nav-links .btn.btn-primary {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    padding: 0.9rem 1.5rem;
+    border-radius: 6.25rem;
+    font-size: 1rem;
+  }
+
+  /* --- Hero Mobile --- */
+  .hero {
+    padding: 7rem 0 5rem;
+    min-height: auto;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-btns {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-btns .btn-white {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  /* --- Steps Section Mobile --- */
+  .steps-section {
+    padding: 5rem 0;
+  }
+
+  .steps-section .section-header h2 {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .step-row {
+    flex-direction: column !important;
+    gap: 2.5rem;
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .step-number-box {
+    margin: 0 auto 1.5rem;
+  }
+
+  .step-visual {
+    width: 100%;
+    padding: 2rem;
+    border-radius: 2rem;
+  }
+
+  .step-visual img {
+    max-width: 180px;
+  }
+
+  /* --- Delivery Cards Mobile --- */
+  .delivery-cards {
+    padding: 5rem 0;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .card-overlay {
+    padding: 1.5rem;
+  }
+
+  .card-overlay h3 {
+    font-size: 1rem;
+  }
+
+  /* --- Partners Mobile --- */
+  .partners-section {
+    padding: 5rem 0;
+  }
+
+  .partner-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .partner-img {
+    height: 220px;
+  }
+
+  /* --- Waitlist Mobile --- */
+  .waitlist-section {
+    padding: 3rem 0 5rem;
+  }
+
+  .waitlist-banner {
+    padding: 3rem 1.75rem;
+    border-radius: 2rem;
+    gap: 2.5rem;
+  }
+
+  .waitlist-content h2 {
+    font-size: 2rem;
+  }
+
+  .waitlist-content p {
+    font-size: 1rem;
+  }
+
+  .waitlist-visual {
+    width: 200px;
+  }
+
+  /* --- Footer Mobile --- */
+  footer {
+    padding: 5rem 0 3rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .footer-bottom div:last-child {
+    flex-direction: column;
+    gap: 0.75rem;
+    display: flex;
+  }
+}
+
+/* === SMALL MOBILE (480px) === */
+@media (max-width: 480px) {
+  .container { padding: 0 1rem; }
+
+  .hero h1 { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .card {
+    aspect-ratio: 16/9;
+  }
+
+  .waitlist-banner {
+    border-radius: 1.5rem;
+    padding: 2.5rem 1.25rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.5rem;
+  }
 }
 
 /* === ANIMATIONS === */
